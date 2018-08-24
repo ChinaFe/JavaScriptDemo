@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>原生选项卡</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            color: #333;
+        }
+        #tab_box{
+            width: 350px;
+            height: 350px;
+            margin:80px auto;
+            text-align: center;
+        }
+        button{
+            padding: 1% 2%;
+            margin-bottom: 5px;
+            border:1px solid #cfcfcf;
+            border-radius: 15px;
+            outline: none;
+            box-shadow: 1px 1px 1px #ccc;
+            background:#f1f1f1;
+        }
+        #tab_box div{
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 350px;
+            display: none;
+        }
+        .styCs{
+            color:#fff;
+            background: #056078;
+        }
+    </style>
+    <script>
+        //window.onload----->页面以及图像图片等加载完随即执行的事件！
+        window.onload=function(){
+            //1:首先需要去获取html中的元素才能进行对其操作
+            var oBox=document.getElementById('tab_box');
+            var aBtn=oBox.getElementsByTagName('button');
+            var aDiv=oBox.getElementsByTagName('div');
+
+            //2:遍历button并绑定点击事件
+            for(var i =0; i < aBtn.length; i++){
+                //2-1:给每个button绑定下标即i值，不懂得看看控制台就明白了
+                    // console.log(aBtn[i].index+"  "+ i);//这个打印出来的是undefined
+
+                aBtn[i].index=i;
+
+                    // console.log(aBtn[i].index+"  "+ i);//这个就已经是绑定完的值
+                
+                aBtn[i].onclick=function(){
+                    //3:再用一个循环遍历一遍来清空当前所有的默认样式,这里可以遍历aBtn也可以遍历aDiv
+                    for(var j = 0; j < aBtn.length; j++){
+                        aBtn[j].className="";
+                        aDiv[j].style.display="none"
+                    }
+                    //3-1:清空之后就是给当前所点击的按钮以及所对应的div显示出来
+                    this.className="styCs";
+                    //div的下标与button的下标肯定是一样的才能显示出来
+                    aDiv[this.index].style.display="block";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+      <div id="tab_box">
+            <!-- 先给默认对应的按钮使用公共样式 -->
+            <button class="styCs">选项一</button>
+            <button>选项二</button>
+            <button>选项三</button>
+            <!-- 先让所有的div都影藏掉，只显示第一个 -->
+            <div style="display:block;">hello 我是按钮一对应的卡片</div>
+            <div>hi 我是按钮二对应的卡片</div>
+            <div>xixi 我是按钮三对应的卡片</div>
+      </div>  
+</body>
+</html>

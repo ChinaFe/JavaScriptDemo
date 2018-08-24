@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>常见电商网的放大镜效果</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #left,#right{
+            position: absolute;
+        }
+        #left{
+            width: 150px;
+            height: 150px;
+            border: 1px solid #ccc;
+        }
+        #left img{
+            width: 100%;
+            height: 100%;
+        }
+        #right{
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+            left:160px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+        #right img{
+            position: absolute;
+            left:0;
+            top:0;
+        }
+        #shadow{
+            position:absolute;
+            width:60px;
+            height:60px;
+            left:0;
+            top:0;
+            background:rgba(0,0,0,.3);
+            display:none;
+        }
+    </style>
+
+    <script>
+        window.onload=function(){
+            //获取元素
+            var oShadow=document.getElementById('shadow');
+            var oLeft=document.getElementById('left');
+            var oRight=document.getElementById('right');
+            var oImg=document.getElementById('img');
+
+            //1：鼠标移入指针和大图显示
+            oLeft.onmouseover=function(){
+                oShadow.style.display=oRight.style.display="block";
+            }
+            //2：鼠标移出指针和大图影藏
+            oLeft.onmouseout=function(){
+                oShadow.style.display=oRight.style.display="none";
+            }
+
+            //3：放大查看细节肯就要在left内移动指针的位置去检测了
+            oLeft.onmousemove=function(e){
+                var e=e||event;
+                //3-1：获取鼠标到指针中心的位置
+                var l=e.clientX-oShadow.offsetWidth/2;
+                var t=e.clientY-oShadow.offsetHeight/2;
+                
+                //3-2：指针的范围不能超出left
+                var oW=oLeft.offsetWidth-oShadow.offsetWidth-2;   //-2是减去边框
+                var oH=oLeft.offsetHeight-oShadow.offsetHeight-2;
+                if(l<0)l=0;
+                if(t<0)t=0;
+                if(l>oW)l=oW;
+                if(t>oH)t=oH;
+                
+                oShadow.style.left=l+'px';
+                oShadow.style.top=t+'px';
+                
+
+                //3-3：控制大照片的展示范围再right之内
+                var oImgW=oImg.offsetWidth-oRight.offsetWidth;
+                var oImgH=oImg.offsetHeight-oRight.offsetHeight;
+
+                //等比例缩放
+                var scaleX=oImgW/oW;
+                var scaleY=oImgH/oH;
+                
+                // 大图的位置与指针的位置一致
+                oImg.style.left=-l*scaleX+'px';
+                oImg.style.top=-t*scaleY+'px';
+
+                
+                
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- 同一张图片准备两张 -->
+    <div id="box">
+        <div id="left">
+            <!-- 放大镜指针 -->
+            <div id="shadow"></div>
+            <img src="image/iphone.jpg" alt="" id="">
+        </div>
+        <div id="right">
+            <img id='img' src="image/iphone.jpg" alt="">
+        </div>
+    </div>
+</body>
+</html>

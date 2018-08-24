@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>原生拖拽</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .oricle{
+            width: 80px;
+            height: 80px;
+            background: #650256;
+            cursor: pointer;
+            /* 要想拖得动，必须记得设置定位,在这里相定和决定都可以 */
+            position: absolute;
+        }
+    </style>
+    <script>
+        //首先还是页面以及图像等加载完执行函数
+        window.onload=function(){
+            //1：万年不变的道理，先获取元素，才能进行操作
+            var oDiv=document.getElementsByTagName('div');
+            
+            //2：既然想用鼠标拖它，肯定得先去点击它，也就是按下鼠标；那就要用到鼠标按下事件
+            oDiv[0].onmousedown=function(e){
+                //解决浏览器兼容性
+                var e=e||event;
+                //2-1：当鼠标点击div的那一刻我们就要去获取鼠标所点击在div的位置
+                var oX=e.clientX-oDiv[0].offsetLeft;
+                var oY=e.clientY-oDiv[0].offsetTop;
+                
+                //2-2:获取完位置以后，我就要让他实施拖拽行为，那就肯定要用移动事件
+                document.onmousemove=function(e){
+                    var e=e||event;
+                    var left=e.clientX-oX;
+                    var top=e.clientY-oY;
+                    
+
+                    var oW=document.documentElement.clientWidth-oDiv[0].offsetWidth;
+                    var oH=document.documentElement.clientHeight-oDiv[0].offsetHeight;
+
+
+                    // 控制其可拖拽的范围不能超出浏览器可视范围
+                    if(left<0)left=0;
+                    if(top<0)top=0;
+                    if(left>oW)left=oW;
+                    if(top>oH)top=oH;
+                    
+                    //想要拖的动，还必须要加px单位，因为拖拽实际上就是改变他定位的值；
+                    oDiv[0].style.left=left+"px";
+                    oDiv[0].style.top=top+"px";
+                }
+                //3：拖拽完毕之后我们肯定是要释放鼠标的，及鼠标释放事件
+                document.onmouseup=function(){
+                   this.onmousemove=null;
+                   this.onmouseup=null;//预防鼠标抬起之后继续循环，（鼠标拿开再次放上去div还会移动）
+                   oDiv[0].releaseCapture && oDiv[0].releaseCapture(); //解决低版本IE下的bug(解锁鼠标捕获)
+                }
+                   oDiv[0].setCapture && oDiv[0].setCapture();//(锁定鼠标捕获  **两方法必须成对出现)
+                   return false;
+            }
+        }
+    </script>
+</head>
+<body>
+     <div class="oricle"></div>
+</body>
+</html>

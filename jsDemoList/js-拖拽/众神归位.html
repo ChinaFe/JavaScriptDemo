@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拖拽之原路返回</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        #box{
+            width: 80px;
+            height: 80px;
+            background: #650256;
+            cursor: pointer;
+            position: absolute;
+            top:10px;
+            right: 10px;
+        }
+        button{
+            background: #039450;
+            color: #fff;
+            outline: none;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        window.onload=function(){
+            //获取元素
+            var oBox=document.getElementById('box');
+            var oBtn=document.getElementById('btn');
+            
+            //声明一个空数组来记录存储div的运行位置，及left和top的值
+            var pro=[];
+            //声明计时器，来实现回放（归位）的一个效果
+            var timer=null;
+
+            //拖拽
+            oBox.onmousedown=function(e){
+                var e=e||event;
+                var disX=e.clientX-oBox.offsetLeft;
+                var disY=e.clientY-oBox.offsetTop;
+
+                document.onmousemove=function(e){
+                    var e=e||event;
+                    var l=e.clientX-disX;
+                    var t=e.clientY-disY;
+                    var oW=document.documentElement.clientWidth-oBox.offsetWidth;
+                    var oH=document.documentElement.clientHeight-oBox.offsetHeight;
+                    
+                    if(l<0)l=0;
+                    if(l>oW)l=oW;
+                    if(t<0)t=0;
+                    if(t>oH)t=oH;
+
+                    oBox.style.left=l+'px';
+                    oBox.style.top=t+'px';
+                    
+                    //存贮div的运行轨迹
+                    pro.push({left:l,top:t})
+                }
+
+                document.onmouseup=function(){
+                    document.onmousemove=null;
+                    document.onmouseup=null;
+                    oBox.releaseCapture && oBox.releaseCapture();
+                }
+
+                oBox.setCapture && oBox.setCapture();
+                return false;
+            }
+
+
+            //给button绑定点击事件
+            oBtn.onclick=function(){
+                //首先我们需要去判断pro里边是否有值(也就是说div有没有被动过)，没有的话就return;
+                if(!pro.length)return;
+                //只要是用了计时器，就一定记得先清除一下
+                clearInterval(timer);
+
+                timer=setInterval(function(){
+                    //把pro中的值再还原出来
+                    var str=pro.pop();
+                    // console.log(str);
+
+                    oBox.style.left=str.left+"px";
+                    oBox.style.top=str.top+"px";
+
+                    //当pro为空的时候就要停止计时器
+                    !pro.length && clearInterval(timer);
+                },30)
+
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="box"></div>
+    <button id="btn">哪来的回哪去</button>
+</body>
+</html>

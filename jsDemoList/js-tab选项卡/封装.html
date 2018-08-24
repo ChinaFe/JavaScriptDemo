@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>面向对象封装选项卡</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            color: #333;
+        }
+        #box{
+            width: 350px;
+            height: 350px;
+            margin:80px auto;
+            text-align: center;
+        }
+        button{
+            padding: 1% 2%;
+            margin-bottom: 5px;
+            border:1px solid #cfcfcf;
+            border-radius: 15px;
+            outline: none;
+            box-shadow: 1px 1px 1px #ccc;
+            background:#f1f1f1;
+        }
+        #box div{
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 350px;
+            display: none;
+        }
+        .styCs{
+            color:#fff;
+            background: #056078;
+        }
+    </style>
+    <script>
+        //封装函数
+        function Tab(){
+            //1:获取元素
+            this.oBox=document.getElementById('box');
+            this.aBtn=this.oBox.getElementsByTagName('button');
+            this.aDiv=this.oBox.getElementsByTagName('div');
+
+            this.init();
+        }
+        
+        //初始化
+        Tab.prototype.init=function(){
+            //1-1：遍历所有button绑定事件并赋予下标
+            for(var i =0; i < this.aBtn.length; i++){
+                this.inFor(i);
+            }
+        }
+        
+        //事件绑定,传参调用时赋予下标
+        Tab.prototype.inFor=function(index){
+            var _this=this;
+            this.aBtn[index].onclick=function(){
+                //先清空当前样式
+                _this.setClear(index);
+            }
+        }
+        
+        //清样式封装
+        Tab.prototype.setClear=function(key){
+            for(var i = 0; i < this.aBtn.length; i++){
+                this.aBtn[i].className="";
+                this.aDiv[i].style.display="none";
+            }
+            this.aBtn[key].className="styCs";
+            this.aDiv[key].style.display="block";   
+        }
+        
+        //加载执行
+        window.onload=function(){
+            new Tab();
+        }
+    </script>
+</head>
+<body>
+    <div id="box">
+        <button class="styCs">JS</button>
+        <button>Python</button>
+        <button>Vue</button>  
+        <div style="display:block;">js</div>
+        <div>python</div>
+        <div>vue</div>
+    </div>
+</body>
+</html>

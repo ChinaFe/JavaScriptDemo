@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>动态路由匹配</title>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>参数的操作</h1>
+        <router-link to="/Home">主页</router-link>
+        <router-link to="/News">新闻</router-link>
+        <router-view></router-view>
+    </div>
+
+    <script type="text/x-template" id="home">
+        <div>
+           hello world
+        </div>
+    </script>
+    <script type="text/x-template" id="news">
+        <div>
+            {{msg}}
+            <br>
+            {{$route.params}}
+        </div>
+    </script>
+    <script>
+        const Home={
+            template:'#home'
+        };
+        
+        const News={
+            template:'#news',
+            data(){
+                return {
+                    msg:['中国','山西','河曲']
+                }
+            }
+        };
+
+        const routes=[
+            {path:'/Home',component:Home},
+            // 必须是2位数的ID
+            {path:'/News/:id(\\d{2})',component:News}
+        ];
+        
+        const router=new VueRouter({routes});
+
+        const app=new Vue({
+            el:'#app',
+            router
+        })
+    </script>
+</body>
+</html>

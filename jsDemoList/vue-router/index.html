@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>常规路由</title>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <h1>Hellow Vue</h1>
+        <router-link to="/myFirst"> Go First</router-link><br>
+        <router-link to="/myLast"> Go Last</router-link>
+        <router-view></router-view>
+    </div>
+
+
+    <script> 
+        // 定义模板组件
+        const First={template:'<div>myFirst</div>'};
+        const Last={template:'<div>myLast</div>'};
+
+        //定义路由路线
+        const routes=[
+            {path:'/myFirst',component:First},
+            {path:'/myLast',component:Last}
+        ]
+        
+        //初始化路由
+        const router=new VueRouter({
+            routes,
+        }) 
+
+        // 实例化vue，根组件
+        const app=new Vue({
+            el:"#app",
+            // 挂载到根实例上
+            router
+        })
+    </script>
+</body>
+</html>

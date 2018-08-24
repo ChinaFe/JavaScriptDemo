@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>默认参数设置</title>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <h1>Hellow Vue</h1>
+        <router-link to="/myFirst"> Go First</router-link><br>
+        <router-view></router-view>
+    </div>
+
+
+    <script type="text/x-template" id="First">
+        <div>
+            {{id}}
+            <br>
+            <button @click="showId">参数获取</button>
+        </div>
+    </script>
+    <script>
+        //定义模板组件
+        const First={
+            template:'#First',
+            data(){
+                // 默认参数0
+                return {
+                    id:0
+                }
+            },
+            mounted() {
+                // 模板加载完后先把真正url上的ID赋值给data中的ID
+                this.id=this.$route.params.id;
+                //如果没有ID就默认给个1
+                if(!this.id){
+                    this.id=1;
+                }
+            },
+            methods:{
+                showId(){
+                    console.log(this.$route.params.id)
+                }
+            }
+        }
+
+        //定义路由路线
+        const routes=[
+            {path:'/myFirst/:id?',component:First}
+        ]
+        
+        //初始化路由
+        const router=new VueRouter({
+            routes,
+        }) 
+
+        // 实例化vue，根组件
+        const app=new Vue({
+            el:"#app",
+            // 挂载到根实例上
+            router
+        })
+    </script>
+</body>
+</html>
