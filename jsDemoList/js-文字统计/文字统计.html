@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文字统计</title>
+    <script>
+        window.onload=function(){
+            var oBox=document.getElementById('box');
+            var oSpan=document.getElementById('span');
+            var oText=document.getElementById('tet');
+            var timer=null;
+            // 1：textarea获取焦点时并获取其内容长度赋值到span的内容上
+            // oText.oninput=function(){
+            //     oSpan.innerHTML='已经输入'+ this.value.length + '个字';
+            // }
+
+            //2：解决ie9下的兼容性问题
+            // 2-1：判断浏览器是那个版本
+            if(window.navigator.userAgent.toLocaleLowerCase().indexOf('msie 9.0')!=-1){
+                // 需要用获取焦点事件和计时器来监听
+                oText.onfocus=function(){
+                    timer=setInterval(function(){
+                        oSpan.innerHTML='已经输入了' + oText.value.length + '个字';
+                    },30)
+                }
+                //失去焦点清除计时器
+                oText.onblur=function(){
+                    clearInterval(timer);
+                }
+            }else{
+                oText.onpropertychange=oText.oninput=function(){
+                    oSpan.innerHTML='已经输入了' + this.value.length + '个字';
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="box">
+        <span id="span"></span>
+        <textarea id="tet" cols="30" rows="10"></textarea>
+    </div>
+</body>
+</html>
