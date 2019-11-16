@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var obj = {
+            name:'zhengchunguang',
+            age:'18',
+            hobby:['smoke','sing','readBook'],
+            sing:{
+                type:'Sentimental'
+            }
+        }
+
+        var obj1 = {};
+
+
+
+        //1、判断原始值还是引用值
+        //2、判断是数组还是对象
+        //3、创建数组或者对象
+        //4、递归
+        function deepClone(origin,target){
+            var target = target || {},
+                arrStr = Object.prototype.toString,
+                arrType = '[object Array]';
+
+            for(var prop in origin){
+                if(origin.hasOwnProperty(prop)){
+                    if(typeof origin[prop] == 'object'){ //1.
+                        // if(arrStr.call(origin[prop]) == arrType){ //2.
+                        //     target[prop] = []; //3.
+                        // }else{
+                        //     target[prop] = {};
+                        // }
+                        arrStr.call(origin[prop]) == arrType ? target[prop] = [] : target[prop] = {};
+                        deepClone(origin[prop],target[prop]);   //4.
+                    }else{
+                        target[prop] = origin[prop];
+                    }
+                }
+            }
+            return target;
+        }
+
+        deepClone(obj,obj1);
+    </script>
+</body>
+</html>
